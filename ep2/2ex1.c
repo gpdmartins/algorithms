@@ -23,7 +23,7 @@ void insereLista (int x){
     nova->posicao = x;
     if (inicio == NULL){
         inicio = nova;
-        nova->prox = nova;
+        nova->prox = inicio;
     }
     else{
         p = inicio;
@@ -33,13 +33,44 @@ void insereLista (int x){
         nova->prox = inicio;
         p->prox = nova;
     }
-
-
 }
 
+void removeLista(Pessoa *p){
+    Pessoa *morta;
+    morta= p->prox;
+    if(p->prox == p || morta == NULL){
+    /*    tem um so elemento ou lista vazia, nao matar*/
+        return;
+    }    
+    else{
+        while(morta != p->prox){
+            morta = morta->prox;
+        }
+        p->prox =morta->prox;
+        free(morta);
+    
+        
+    }
+}
+void imprimeLista(){
+    Pessoa *p = inicio;
+    if(inicio != NULL){
+        printf("%d ", p->posicao);
+        
+        for(p=p->prox;p->prox != inicio;p=p->prox){
+            printf("%d ", p->posicao);
+        }
+            printf("\n");
+    }
+}
 int main(){
-/*    Pessoa *inicio;
-    inicio = NULL;
-*/
+    Pessoa *r= inicio;
+    int i;
+    for(i=1;i<=40;i++)
+        insereLista(1);
+      insereLista(2);
+    imprimeLista();
+   
+   
     return 0;
 }
