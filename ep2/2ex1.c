@@ -38,39 +38,74 @@ void insereLista (int x){
 void removeLista(Pessoa *p){
     Pessoa *morta;
     morta= p->prox;
-    if(p->prox == p || morta == NULL){
-    /*    tem um so elemento ou lista vazia, nao matar*/
-        return;
-    }    
-    else{
-        while(morta != p->prox){
-            morta = morta->prox;
-        }
-        p->prox =morta->prox;
-        free(morta);
-    
+    p->prox = morta->prox;
+    free(morta);
         
-    }
 }
+
 void imprimeLista(){
-    Pessoa *p = inicio;
-    if(inicio != NULL){
-        printf("%d ", p->posicao);
+    Pessoa *printa;
+    if(inicio == NULL)
+        printf("lista vazia!");
+    else{
         
-        for(p=p->prox;p->prox != inicio;p=p->prox){
-            printf("%d ", p->posicao);
+        for(printa=inicio; printa->prox != inicio; printa = printa->prox){
+            printf("%d ", printa->posicao);
+
         }
-            printf("\n");
+        printf("%d ", printa->posicao);
+            
     }
+    printf("\n");
 }
-int main(){
-    Pessoa *r= inicio;
-    int i;
-    for(i=1;i<=40;i++)
-        insereLista(1);
-      insereLista(2);
+
+void resolveJosephus(int n, int m){
+    int i, k, j;
+        
+    Pessoa *killer, *suicida;
+    /*inserindo n pessoas*/
+    for (i = 1; i <=n; i++)
+        insereLista(i);
     imprimeLista();
-   
-   
+    
+    /*anda ate matar n-1*/
+        
+    killer = inicio;
+    
+    k=1;
+    for(i = 0; i < n-1; i++){
+        suicida = killer;
+        for(j = 1; j < m;j++){
+            killer = killer->prox; /*anda m vezes por morte*/
+            
+        }
+        
+        
+        if(killer->prox == suicida){
+            if(inicio==suicida->prox)
+                inicio = (suicida->prox)->prox;
+            removeLista(suicida);
+            killer=suicida->prox;
+            
+        }else{
+            if(inicio==killer->prox)
+                inicio = (killer->prox)->prox;
+            removeLista(killer);
+            killer = killer->prox;
+        }
+        /*azarado = killer->prox;*/
+        printf("%d - ", k);
+        k++;
+        imprimeLista();  
+    }    
+
+     imprimeLista();
+}
+
+
+int main(){
+    resolveJosephus(41,1);
+    
     return 0;
 }
+
