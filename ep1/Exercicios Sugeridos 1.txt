@@ -1,0 +1,63 @@
+Exercícios sugeridos 1
+
+Seguem alguns exercícios relacionados com recursão.
+
+1 - A função abaixo promete encontrar o valor de um elemento máximo de v[0..n-1]. A função cumpre a promessa?
+
+int maxi (int n, int v[]) {       
+   int j, m = v[0];
+   for (j = 1; j < n; ++j)
+      if (v[j-1] < v[j]) m = v[j];
+   return m;
+}
+
+2 - Critique a seguinte função recursiva; ela promete encontrar o valor de um elemento máximo de v[0..n-1].
+
+int maximoR1 (int n, int v[]) {       
+   int x;
+   if (n == 1) return v[0];    
+   if (n == 2) {
+      if (v[0] < v[1]) return v[1];
+      else return v[0];
+   }
+   x = maximoR1 (n-1, v);
+   if (x < v[n-1]) return v[n-1];
+   else return x;
+}
+
+3 - Escreva uma função recursiva que calcule a soma dos elementos positivos do vetor de inteiros  v[0..n-1].  O problema faz sentido quando n é igual a 0?  Quanto deve valer a soma nesse caso?
+
+4 - Escreva uma função recursiva que calcule a soma dos dígitos de um inteiro estritamente positivo n. A soma dos dígitos de 132, por exemplo, é 6.
+
+5 - Critique a seguinte função recursiva:
+
+int XX (int n) {
+   if (n == 0) return 0;
+   else return XX (n/3+1) + n;
+}
+
+6 - Régua inglesa [Sedgewick 5.8, Roberts 5.11] Escreva uma função recursiva que imprima uma régua de ordem n no intervalo [0..2n]. O traço no ponto médio da régua deve ter comprimento n, os traços nos pontos médios dos subintervalos superior e inferior devem ter comprimento n−1, e assim por diante. A figura mostra uma régua de ordem 4.
+
+.
+. -
+. --
+. -
+. ---
+. -
+. --
+. -
+. ----
+. -
+. --
+. -
+. ---
+. -
+. --
+. -
+.
+
+Para revisar conceitos de recursão e ver mais exercícios acesse:
+
+    https://www.ime.usp.br/~pf/algoritmos/aulas/recu.html
+
+Última atualização: Sunday, 15 Jan 2017, 20:40
