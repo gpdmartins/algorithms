@@ -28,6 +28,12 @@ struct fila{
     int tamanho;
 };
 
+int filaVazia(Fila *f){
+    if (f->fim == NULL)
+        return 1;
+    return 0;
+}
+
 void insereFila (int linha, int coluna, Fila *f){
     No *aux = mallocSafe(sizeof(No));
     if (f == NULL){
@@ -52,9 +58,12 @@ void insereFila (int linha, int coluna, Fila *f){
 
 No *removeFila (Fila *f){
     No *retorno;
+    No *morto;
     retorno = f->inicio;
+    morto = retorno;
     f->inicio = f->inicio->prox;
     f->tamanho--;
+    free(morto);
     return retorno;
 }
 void imprimeFila (Fila *f){
@@ -67,11 +76,65 @@ void imprimeFila (Fila *f){
     if (i> 0)
         printf("\n");
 }
+  
+/*int * distancias(int m, int n, int **labirinto, int c){
+    Fila *f;
+    int *d;
+    int j;
+    No *atual;
+    d = mallocSafe(n*sizeof(int));
+    for (j = 0; j < n; j++)
+        d[j] = n;
+    d[c] = 0;
+    insereFila(0, 0, f);
+    while(!filaVazia(f)){
+        if
+    }
+}*/
+
+
+
 int resolveLabirinto (int labirinto[LIN][COL], int m, int n){
-    int *atual = labirinto[0][0];
-    int *passo;
-    
-}
+        No *visitados = mallocSafe(n*m*sizeof(No));
+        int i;
+        No *atual;
+        Fila *f;
+        int fim;
+        for (i = 0; i< n*m;i++){
+            (visitados[i]).linha = -1;
+            (visitados[i]).coluna = -1;
+        }
+        i=0;
+        insereFila(0,0,f);
+        while(!filaVazia(f)){
+            
+            atual = removeFila(f);
+
+            if(atual->linha = m-1 && atual->coluna == n-1)
+                return f->tamanho;    
+
+            visitados[i].linha = atual->linha;
+            visitados[i].coluna = atual->coluna;
+            i++;
+            labirinto[atual->linha][atual->coluna] = -1;
+            while(labirinto[atual->linha][atual->coluna+1] != 1 && atual->coluna+1 < n){
+                if(atual->linha == 0 && atual->coluna+1){
+                    insereFila(atual->linha, atual->coluna+1, f);
+                labirinto[atual->linha][atual->coluna+1] = 2;
+                }    
+             }
+             while(labirinto[atual->linha+1][atual->coluna] != 1 && atual->linha+1 < m){
+                if(atual->linha == 0 && atual->coluna+1)
+                    insereFila(atual->linha, atual->coluna+1, f);
+             }
+
+            
+        /* ir colocando o caminho 
+        }
+
+
+    }
+
 
 int main(){
     Fila *f = mallocSafe(sizeof(Fila));
