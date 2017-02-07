@@ -28,24 +28,26 @@ struct fila{
     int tamanho;
 };
 
+void iniciaFila(Fila *f){
+    f = mallocSafe(sizeof(Fila));
+    f->inicio = NULL;
+    f->fim = NULL;
+    f->tamanho = 0;
+}
+
 int filaVazia(Fila *f){
-    if (f->fim == NULL)
+    if (f->tamanho == 0)
         return 1;
     return 0;
 }
 
 void insereFila (int linha, int coluna, Fila *f){
     No *aux = mallocSafe(sizeof(No));
-    if (f == NULL){
-    f = mallocSafe(sizeof(Fila));
-    f->inicio = NULL;
-    f->fim = NULL;
-    f->tamanho = 0;
-    }
+    
     aux->linha = linha;
     aux->coluna = coluna;
     aux->prox = NULL;
-    if(f->fim == NULL){
+    if(f->inicio == NULL){
         f->inicio = aux;
         f->fim = aux;
     }
@@ -57,14 +59,20 @@ void insereFila (int linha, int coluna, Fila *f){
 }
 
 No *removeFila (Fila *f){
-    No *retorno;
     No *morto;
-    retorno = f->inicio;
-    morto = retorno;
+    No *retorno = mallocSafe(sizeof(No));
+
+    if(!filaVazia(f)){
+    retorno->linha = (f->inicio)->linha;
+    retorno->coluna = (f->inicio)->coluna;
+    retorno->prox = (f->inicio)->prox;
+    morto = f->inicio;
     f->inicio = f->inicio->prox;
     f->tamanho--;
     free(morto);
     return retorno;
+    }
+    return NULL;
 }
 void imprimeFila (Fila *f){
     No *aux = f->inicio;
@@ -95,63 +103,75 @@ void imprimeFila (Fila *f){
 
 
 int resolveLabirinto (int labirinto[LIN][COL], int m, int n){
-        No *visitados = mallocSafe(n*m*sizeof(No));
-        int i;
-        No *atual;
-        Fila *f;
-        int fim;
-        for (i = 0; i< n*m;i++){
-            (visitados[i]).linha = -1;
-            (visitados[i]).coluna = -1;
-        }
-        i=0;
+
+        
+        No *atual = mallocSafe(sizeof(No));
+        Fila *f = mallocSafe(sizeof(Fila));
+        
+        
+        iniciaFila(f);    
         insereFila(0,0,f);
+                                           
         while(!filaVazia(f)){
+            /*atual = mallocSafe(sizeof(No));*/
             
             atual = removeFila(f);
 
-            if(atual->linha = m-1 && atual->coluna == n-1)
-                return f->tamanho;    
-
-            visitados[i].linha = atual->linha;
-            visitados[i].coluna = atual->coluna;
-            i++;
-            labirinto[atual->linha][atual->coluna] = -1;
-            while(labirinto[atual->linha][atual->coluna+1] != 1 && atual->coluna+1 < n){
-                if(atual->linha == 0 && atual->coluna+1){
-                    insereFila(atual->linha, atual->coluna+1, f);
-                labirinto[atual->linha][atual->coluna+1] = 2;
-                }    
-             }
-             while(labirinto[atual->linha+1][atual->coluna] != 1 && atual->linha+1 < m){
-                if(atual->linha == 0 && atual->coluna+1)
-                    insereFila(atual->linha, atual->coluna+1, f);
-             }
-
+            if(atual->linha == m-1 && atual->coluna == n-1){
+                printf("Distancia: %d\n", labirinto[m-1][n-1]);
+                return labirinto[m-1][n-1];    
+            }
             
-        /* ir colocando o caminho 
-        }
+            if(labirinto[atual->linha][atual->coluna+1] == 0 && (atual->coluna)+1 < n){
+                
+                    insereFila(atual->linha, (atual->coluna)+1, f);
+                labirinto[atual->linha][atual->coluna+1] = labirinto[atual->linha][atual->coluna]+1;
+                } /* direita */    
+             
+             if(labirinto[atual->linha][(atual->coluna)-1] == 0 && atual->coluna-1 >= 0){
+                
+                    insereFila(atual->linha, (atual->coluna)-1, f);
+                labirinto[atual->linha][(atual->coluna)+1] = labirinto[atual->linha][atual->coluna]+1;
+                }    /* esquerda */
+             
+             if(labirinto[(atual->linha)+1][atual->coluna] == 0 && atual->linha+1 < m){
+                
+                    insereFila((atual->linha)+1, atual->coluna, f);
+                labirinto[(atual->linha)+1][atual->coluna] = labirinto[atual->linha][atual->coluna]+1;
+                }    /* baixo */
+             if(labirinto[(atual->linha)-1][atual->coluna] == 0 && (atual->linha) -1 >= 0){
+                
+                    insereFila((atual->linha)-1, atual->coluna, f);
+                labirinto[(atual->linha)-1][atual->coluna] = labirinto[atual->linha][atual->coluna]+1;
+                }    /* cima */   
+        }    
+         
+        return -1;
 
 
     }
 
 
-int main(){
-    Fila *f = mallocSafe(sizeof(Fila));
-    f->inicio = NULL;
-    f->fim = NULL;
-    f->tamanho = 0;
-    insereFila(0, 0, f);
-    insereFila(1, 2, f);
-    insereFila(1, 3, f);
-    
-            /*printf("(%d , %d) ", (f->inicio)->linha, (f->inicio)->coluna);*/
-    imprimeFila(f);
-    removeFila(f);
-    imprimeFila(f);
-    removeFila(f);
-    imprimeFila(f);
-    removeFila(f);
-    imprimeFila(f);
-    return 0;
+
+int main () {
+int m , n ;
+
+/* Declaracao dos labirintos */
+
+int labirinto1 [3][3] = { {0 ,1 ,1} , {0 ,0 ,0} , {1 ,0 ,0}};
+/* int labirinto2 [4][4] = { {0 ,0 ,1 ,1} , {1 ,0 ,0 ,0} ,
+{1 ,0 ,1 ,0} , {1 ,0 ,0 ,0}};
+int labirinto3 [5][6] = { {0 ,0 ,1 ,0 ,1 ,1} , {1 ,0 ,0 ,0 ,1 ,0} ,
+{1 ,1 ,0 ,1 ,0 ,0} , {1 ,0 ,0 ,0 ,0 ,1} , {1 ,1 ,1 ,1 ,0 ,0}}; */
+m = 3;
+n = 3;
+resolveLabirinto ( labirinto1 , m , n );
+
+m = 4;
+n = 4;
+/* resolveLabirinto ( labirinto2 , m , n ) ; */
+m = 5;
+n = 6;
+/* resolveLabirinto ( labirinto3 , m , n ) ; */
+return 0;
 }
